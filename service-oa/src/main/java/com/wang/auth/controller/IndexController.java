@@ -33,42 +33,8 @@ public class IndexController {
     //login
     @PostMapping("login")
     public Result login(@RequestBody LoginVo loginVo) {
-        //{"code":200,"data":{"token":"admin-token"}}
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("token","admin-token");
-//        return Result.ok(map);
-        //1 获取输入用户名和密码
-        //2 根据用户名查询数据库
-        String username = loginVo.getUsername();
-        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getUsername,username);
-        SysUser sysUser = sysUserService.getOne(wrapper);
 
-        //3 用户信息是否存在
-        if(sysUser == null) {
-            throw new GuiguException(201,"用户不存在");
-        }
-
-        //4 判断密码
-        //数据库存密码（MD5）
-        String password_db = sysUser.getPassword();
-        //获取输入的密码
-        String password_input = MD5.encrypt(loginVo.getPassword());
-        if(!password_db.equals(password_input)) {
-            throw new GuiguException(201,"密码错误");
-        }
-
-        //5 判断用户是否被禁用  1 可用 0 禁用
-        if(sysUser.getStatus().intValue()==0) {
-            throw new GuiguException(201,"用户已经被禁用");
-        }
-
-        //6 使用jwt根据用户id和用户名称生成token字符串
-        String token = JwtHelper.createToken(sysUser.getId(), sysUser.getUsername());
-        //7 返回
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",token);
-        return Result.ok(map);
+        return Result.ok();
     }
 
     //info
